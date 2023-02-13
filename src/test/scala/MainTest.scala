@@ -4,7 +4,7 @@ import org.scalatest.matchers.should.Matchers
 import sample.Main
 
 class MainTest extends AnyFunSuite with Matchers {
-  val spark = SparkSession
+  val spark: SparkSession = SparkSession
     .builder()
     .appName("TransformDFTest")
     .master("local[*]")
@@ -20,12 +20,12 @@ class MainTest extends AnyFunSuite with Matchers {
       (2, 0),
       (2, 0),
       (2, 0)
-    ).toDF("key", "value")
+    ).toDF(Main.KEY_FIELD, Main.VALUE_FIELD)
 
     val expectedDF = Seq(
-      (1, 3),
-      (2, 0)
-    ).toDF("key", "value")
+      (1, 3, 1),
+      (2, 0, 3)
+    ).toDF(Main.KEY_FIELD, Main.VALUE_FIELD, "count")
 
     val resultDF = Main.transformDF(inputDF)
 
@@ -33,7 +33,7 @@ class MainTest extends AnyFunSuite with Matchers {
   }
 
   test("should handle empty DataFrames correctly") {
-    val inputDF = Seq.empty[(Int, Int)].toDF("key", "value")
+    val inputDF = Seq.empty[(Int, Int)].toDF(Main.KEY_FIELD, Main.VALUE_FIELD)
 
     val resultDF = Main.transformDF(inputDF)
 
@@ -48,10 +48,36 @@ class MainTest extends AnyFunSuite with Matchers {
       (1, 3),
       (2, 4),
       (2, 4)
-    ).toDF("key", "value")
+    ).toDF(Main.KEY_FIELD, Main.VALUE_FIELD)
 
     val resultDF = Main.transformDF(inputDF)
 
     resultDF.count() should be(0)
   }
+
+  test("should return true when Dataset is valid") {
+    val inputDF = Seq(
+      (1, 2),
+      (1, 2),
+      (1, 2),
+      (1, 3),
+      (1, 3)
+    ).toDF(Main.KEY_FIELD, Main.VALUE_FIELD)
+
+    Main.isValidateDF(inputDF)
+  }
+
+  test("should return true when Dataset is invalid") {
+    val inputDF = Seq(
+      (1, 2),
+      (1, 2),
+      (1, 2),
+      (1, 3),
+      (1, 3),
+      (1, 3)
+    ).toDF(Main.KEY_FIELD, Main.VALUE_FIELD)
+
+    !Main.isValidateDF(inputDF)
+  }
+
 }
