@@ -37,7 +37,8 @@ object Main {
     val transformedDF: DataFrame = transformDF(combinedDF)
 
     if (isValidateDF(transformedDF)) {
-      writeOutput(prepareToSave(transformedDF), outputPath)
+      val dfToSave = prepareToSave(transformedDF)
+      writeOutput(dfToSave, outputPath)
     } else {
       throw new Exception("Invalid dataset, please check it.")
     }

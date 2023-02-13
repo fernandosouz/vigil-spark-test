@@ -25,12 +25,11 @@ The input files are located in the specified input directory, and they have the 
 
 - They contain headers, the column names are random strings, and they are not consistent across files
 - Both columns are integer values
-- Some files are CSV, some are TSV, and the program must handle this
-- The empty string should represent 0
+- Some files are CSV, some are TSV
 
 ## Output file
 
-The program writes the result to a new file in TSV format in the specified output directory in S3, with the following characteristics:
+The program writes the result to a new file in TSV format in the specified output directory, with the following characteristics:
 
 - The first column contains each key exactly once
 - The second column contains the integer occurring an odd number of times for the key
@@ -39,8 +38,9 @@ The program writes the result to a new file in TSV format in the specified outpu
 
 The program implements the following steps:
 
-1. Read the input files from the specified input directory in S3
+1. Read the input files from the specified input directory
 2. Transform the data into the desired format, by grouping the data by key and value and aggregating the count of values
-3. Write the result to a new file in TSV format in the specified output directory in S3
+and filtering odd occurrence values
+3. Write the result to a new file in TSV format in the specified output directory
 
 The program uses Spark for data processing, and Hadoop for file system operations.
