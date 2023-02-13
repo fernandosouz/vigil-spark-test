@@ -1,4 +1,4 @@
-# Odd Occurrence Parquet
+# Odd Occurrence
 
 This program processes a set of input files, located in a directory, and writes the result to a new file in TSV format in the specified output directory.
 
